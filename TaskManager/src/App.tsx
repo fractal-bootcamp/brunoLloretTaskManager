@@ -1,16 +1,18 @@
 import { useState } from "react";
 import useCounterStore from "./store/counterStore";
-import "./App.css";
-import { Controls } from "./components/Controls";
-import { BearCounter } from "./components/BearCounter";
+import TaskManagementPageContainer from "./components/TaskManagementPage/TaskManagementPageContainer";
 
 function App() {
   return (
     <>
+      <div className="">
+        <h2 className="justify-center flex border-2 border-gray-200 font-mono">
+          {" "}
+          Task Manager
+        </h2>
+      </div>
       <div>
-        <h2> Task Manager</h2>
-        <BearCounter />
-        <Controls />
+        <TaskManagementPageContainer />
       </div>
     </>
   );
