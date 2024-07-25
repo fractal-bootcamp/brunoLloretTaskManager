@@ -9,6 +9,8 @@ export const statuses: Status[] = [
   "Archived",
 ];
 
+export type View = "CREATE_TASK" | "CREATE_CUSTOM_THEME" | "VIEW_ALL_TASKS";
+
 export interface Task {
   title: string;
   description: string;
