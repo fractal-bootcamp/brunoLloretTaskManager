@@ -16,19 +16,20 @@ export interface Task {
 }
 
 export type TaskActions = {
-  viewTask: (task: Task) => Task;
+  createTask: (task: Task) => void;
+  // Parameter: task: Task — This means that the function expects a single task object that you want to add to the list.
+  // Return Type: void — This indicates that the function does not return any value. Instead, it directly modifies the state.
+
+  viewTask: (task: Task) => Task | null;
   updateTaskTitle: (task: Task) => string;
   updateTaskDescription: (task: Task) => string;
   updateTaskStatus: (task: Task) => Status;
-};
-
-export type TaskAction = {
-  type: keyof TaskActions;
-  task: Task;
+  deleteTask: (task: Task) => void;
 };
 
 export interface TasksState {
   tasks: Task[];
+  currentTask: Task | null;
 }
 
 export interface TaskState {
