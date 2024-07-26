@@ -122,7 +122,7 @@ const TaskManagementPageContainer = () => {
 
   return (
     <div className="flex">
-      <div className="bg-yellow-300 container max-w-96 p-5">
+      <div className="bg-yellow-300 container max-w-96 p-5 border-8 rounded-3xl">
         <TaskList
           tasks={tasks}
           onView={handleViewTask}
