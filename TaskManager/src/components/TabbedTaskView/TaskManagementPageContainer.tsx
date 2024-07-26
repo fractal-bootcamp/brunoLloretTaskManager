@@ -5,7 +5,6 @@ import useTaskStore from "../../store/taskStore";
 import generateRandomTasks from "../TaskListDummyData";
 import { Status, Task, statuses, View } from "../../interfaces/interfaces";
 import CreateCustomTheme from "../TaskManagementPage/CreateCustomTheme";
-import CreateTask from "../TaskManagementPage/CreateTask";
 
 const TaskManagementPageContainer = () => {
   const {
@@ -17,7 +16,6 @@ const TaskManagementPageContainer = () => {
     editedDescription,
     editedStatus,
 
-    createTask,
     viewTask,
     deleteTask,
 
@@ -40,8 +38,10 @@ const TaskManagementPageContainer = () => {
   const [selectedTaskTitle, setSelectedTaskTitle] = useState<string | null>(
     null
   );
+  const [selectedTaskStatus, setSelectedTaskStatus] = useState<Status | null>(
+    null
+  );
   const [isEditing, setIsEditing] = useState(false);
-  const [isCreating, setIsCreating] = useState(true);
 
   //Mounts the initial dummy data list for testing UI
   useEffect(() => {
@@ -96,6 +96,30 @@ const TaskManagementPageContainer = () => {
     }
   };
 
+  const handleChangeOfStatus = (title: string, newStatus: Status) => {
+    // Find the task that needs to be updated
+    const taskIndex = tasks.findIndex((task: Task) => task.title === title);
+    if (taskIndex === -1) return; // Task not found, exit early
+
+    // Create a new tasks array with the updated status
+    const updatedTasks = [...tasks];
+    updatedTasks[taskIndex] = {
+      ...updatedTasks[taskIndex],
+      status: newStatus,
+    };
+
+    // Update the state with the new task list
+    initializeTasks(updatedTasks);
+
+    // If the selected task is the one being updated, update its status too
+    if (selectedTask && selectedTask.title === title) {
+      setSelectedTask({
+        ...selectedTask,
+        status: newStatus,
+      });
+    }
+  };
+
   return (
     <div className="flex">
       <div className="bg-yellow-300 container max-w-96 p-5">
@@ -104,6 +128,7 @@ const TaskManagementPageContainer = () => {
           onView={handleViewTask}
           onDelete={deleteTask}
           selectedTaskTitle={selectedTaskTitle}
+          onEditStatus={handleChangeOfStatus}
         />
       </div>
       {selectedTask && (
@@ -124,5 +149,4 @@ const TaskManagementPageContainer = () => {
     </div>
   );
 };
-
 export default TaskManagementPageContainer;

@@ -5,18 +5,23 @@ export interface TaskListProps {
   onView?: (title: string) => void;
   onDelete?: (title: string) => void;
   onEdit?: (title: string) => void;
+  onEditStatus?: (title: string) => void;
   selectedTaskTitle?: string | null;
-  selectedTaskStatus?: string | null;
+  selectedTaskStatus?: Status | null;
+  editedStatus?: Status | null;
 }
 
 //combining two approaches
-export type Status = "Pending" | "In Progress" | "Completed" | "Archived";
+export type Status = {
+  name: "Pending" | "In Progress" | "Completed" | "Archived";
+  order: number;
+};
 
 export const statuses: Status[] = [
-  "Pending",
-  "In Progress",
-  "Completed",
-  "Archived",
+  { name: "Pending", order: 0 },
+  { name: "In Progress", order: 1 },
+  { name: "Completed", order: 2 },
+  { name: "Archived", order: 3 },
 ];
 
 export type View = "CREATE_TASK" | "CREATE_CUSTOM_THEME" | "VIEW_ALL_TASKS";
