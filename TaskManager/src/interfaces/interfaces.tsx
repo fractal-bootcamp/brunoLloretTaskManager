@@ -12,9 +12,9 @@ export const statuses: Status[] = [
 export type View = "CREATE_TASK" | "CREATE_CUSTOM_THEME" | "VIEW_ALL_TASKS";
 
 export interface Task {
-  title: string;
-  description: string;
-  status: Status;
+  title: string | null;
+  description: string | null;
+  status: Status | null;
 }
 
 export type TaskActions = {

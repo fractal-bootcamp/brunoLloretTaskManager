@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TaskList from "./TaskList";
+import TaskDetails from "./TaskDetails";
 import useTaskStore from "../../store/taskStore";
 import generateRandomTasks from "../TaskListDummyData";
 import { Status, Task, statuses, View } from "../../interfaces/interfaces";
@@ -9,37 +10,55 @@ import CreateTask from "./CreateTask";
 const TaskManagementPageContainer = () => {
   const {
     tasks,
+
     currentTask,
     editingTask,
     editedTitle,
     editedDescription,
     editedStatus,
+
+    createTask,
     viewTask,
     deleteTask,
+
     updateTaskTitle,
     updateTaskDescription,
     updateTaskStatus,
+
     startEditing,
     saveEditing,
     cancelEditing,
+
     setEditedTitle,
     setEditedDescription,
     setEditedStatus,
+
     initializeTasks,
   }: any = useTaskStore();
+  const [taskStorage, setTaskStorage] = useState<Task[]>([]);
   const [currentView, setCurrentView] = useState<View>("VIEW_ALL_TASKS");
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [selectedTaskTitle, setSelectedTaskTitle] = useState<string | null>(
+    null
+  );
+  const [isEditing, setIsEditing] = useState(false);
+  const [isCreating, setIsCreating] = useState(true);
 
+  //Mounts the initial dummy data list for testing UI
   useEffect(() => {
     const dummyList = generateRandomTasks();
     initializeTasks(dummyList);
+    setTaskStorage([...taskStorage, ...dummyList]);
   }, [initializeTasks]);
 
-  const handleEdit = (task: Task) => {
-    startEditing(task);
-    setEditedTitle(task.title);
-    setEditedDescription(task.description);
-    setEditedStatus(task.status);
+  const handleEdit = () => {
+    if (selectedTask) {
+      startEditing(selectedTask);
+      setEditedTitle(selectedTask.title);
+      setEditedDescription(selectedTask.description);
+      setEditedStatus(selectedTask.status);
+      setIsEditing(true);
+    }
   };
 
   const handleSave = () => {
@@ -48,11 +67,20 @@ const TaskManagementPageContainer = () => {
       updateTaskDescription(editingTask.title, editedDescription);
       updateTaskStatus(editingTask.title, editedStatus);
       saveEditing();
+      setIsEditing(false);
+      // Update the selectedTask with the new values
+      setSelectedTask({
+        ...selectedTask!,
+        title: editedTitle,
+        description: editedDescription,
+        status: editedStatus,
+      });
     }
   };
 
   const handleCancel = () => {
     cancelEditing();
+    setIsEditing(false);
   };
 
   const handleDisplay = (view: View) => {
@@ -60,14 +88,50 @@ const TaskManagementPageContainer = () => {
   };
 
   const handleViewTask = (title: string) => {
-    const task = tasks.find((t: Task) => t.title === title);
-    setSelectedTask(task || null);
+    if (title === selectedTaskTitle) {
+      setSelectedTask(null);
+      setSelectedTaskTitle(null);
+      setIsEditing(false);
+    } else {
+      const task = tasks.find((t: Task) => t.title === title);
+      setSelectedTask(task || null);
+      setSelectedTaskTitle(title);
+      setIsEditing(false);
+    }
   };
 
   const renderView = () => {
     switch (currentView) {
       case "CREATE_TASK":
-        return <CreateTask />;
+        return (
+          <CreateTask
+            task={null}
+            isCreating={false}
+            onCreate={createTask}
+            isEditing={false}
+            editedTitle={""}
+            editedDescription={""}
+            editedStatus={"Pending"}
+            onEdit={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            onSave={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            onCancel={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            onEditTitle={function (title: string): void {
+              throw new Error("Function not implemented.");
+            }}
+            onEditDescription={function (description: string): void {
+              throw new Error("Function not implemented.");
+            }}
+            onEditStatus={function (status: Status): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
+        );
       case "CREATE_CUSTOM_THEME":
         return <CreateCustomTheme />;
       case "VIEW_ALL_TASKS":
@@ -75,32 +139,24 @@ const TaskManagementPageContainer = () => {
           <div className="flex">
             <TaskList
               tasks={tasks}
-              editingTask={editingTask}
-              editedTitle={editedTitle}
-              editedDescription={editedDescription}
-              editedStatus={editedStatus}
               onView={handleViewTask}
-              onEdit={handleEdit}
               onDelete={deleteTask}
-              onSave={handleSave}
-              onCancel={handleCancel}
-              onEditTitle={setEditedTitle}
-              onEditDescription={setEditedDescription}
-              onEditStatus={setEditedStatus}
+              selectedTaskTitle={selectedTaskTitle}
             />
             {selectedTask && (
-              <div className="ml-8 w-1/2">
-                <h2 className="text-xl font-bold mb-4">Task Details</h2>
-                <p>
-                  <strong>Title:</strong> {selectedTask.title}
-                </p>
-                <p>
-                  <strong>Description:</strong> {selectedTask.description}
-                </p>
-                <p>
-                  <strong>Status:</strong> {selectedTask.status}
-                </p>
-              </div>
+              <TaskDetails
+                task={selectedTask}
+                isEditing={isEditing}
+                editedTitle={editedTitle}
+                editedDescription={editedDescription}
+                editedStatus={editedStatus}
+                onEdit={handleEdit}
+                onSave={handleSave}
+                onCancel={handleCancel}
+                onEditTitle={setEditedTitle}
+                onEditDescription={setEditedDescription}
+                onEditStatus={setEditedStatus}
+              />
             )}
           </div>
         );

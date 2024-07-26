@@ -7,7 +7,6 @@ function App() {
     <>
       <div className="">
         <h2 className="justify-center flex border-2 border-gray-200 font-mono">
-          {" "}
           Task Manager
         </h2>
       </div>
