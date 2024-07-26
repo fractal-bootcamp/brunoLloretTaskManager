@@ -58,8 +58,8 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
             className="w-full p-2 mb-4 border rounded"
           >
             {statuses.map((status) => (
-              <option key={status} value={status}>
-                {status}
+              <option key={status} value={status.name}>
+                {status.name}
               </option>
             ))}
           </select>
@@ -92,7 +92,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
         <strong>Description:</strong> {task.description}
       </p>
       <p>
-        <strong>Status:</strong> {task.status}
+        <strong>Status:</strong> {task.status.name}
       </p>
       <button
         onClick={onEdit}

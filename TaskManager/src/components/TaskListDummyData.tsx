@@ -1,13 +1,13 @@
 // Import necessary types
-import { Task, Status } from "../interfaces/interfaces"; // Adjust import path as necessary
+import { Task, Status, statuses } from "../interfaces/interfaces"; // Adjust import path as necessary
 
 // Function to generate random tasks
 const generateRandomTasks = (): Task[] => {
   const statuses: Status[] = [
-    "Pending",
-    "In Progress",
-    "Completed",
-    "Archived",
+    { name: "Pending", order: 0 },
+    { name: "In Progress", order: 1 },
+    { name: "Completed", order: 2 },
+    { name: "Archived", order: 3 },
   ];
 
   const randomStatus = () =>

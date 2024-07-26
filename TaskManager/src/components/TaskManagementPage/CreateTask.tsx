@@ -47,7 +47,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
   const [newTask, setNewTask] = useState<Task>({
     title: "",
     description: "",
-    status: "Pending",
+    status: { name: "Pending", order: 0 },
   });
 
   const handleInputChange = (
@@ -95,7 +95,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
           >
             {statuses.map((status) => (
               <option key={status} value={status}>
-                {status}
+                {status.name}
               </option>
             ))}
           </select>
