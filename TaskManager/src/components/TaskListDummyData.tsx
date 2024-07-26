@@ -27,6 +27,6 @@ const generateRandomTasks = (): Task[] => {
 };
 export default generateRandomTasks;
 
-// Example usage
-const dummyTasks = generateRandomTasks();
-console.log(dummyTasks);
+// // Example usage
+// const dummyTasks = generateRandomTasks();
+// console.log(dummyTasks);

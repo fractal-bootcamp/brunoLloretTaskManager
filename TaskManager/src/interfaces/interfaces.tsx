@@ -1,7 +1,17 @@
 import { create } from "zustand";
 
+export interface TaskListProps {
+  tasks: Task[];
+  onView?: (title: string) => void;
+  onDelete?: (title: string) => void;
+  onEdit?: (title: string) => void;
+  selectedTaskTitle?: string | null;
+  selectedTaskStatus?: string | null;
+}
+
 //combining two approaches
 export type Status = "Pending" | "In Progress" | "Completed" | "Archived";
+
 export const statuses: Status[] = [
   "Pending",
   "In Progress",
@@ -9,10 +19,12 @@ export const statuses: Status[] = [
   "Archived",
 ];
 
+export type View = "CREATE_TASK" | "CREATE_CUSTOM_THEME" | "VIEW_ALL_TASKS";
+
 export interface Task {
-  title: string;
-  description: string;
-  status: Status;
+  title: string | null;
+  description: string | null;
+  status: Status | null;
 }
 
 export type TaskActions = {

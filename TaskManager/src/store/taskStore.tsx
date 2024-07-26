@@ -21,21 +21,25 @@ interface TaskStoreState {
   // Actions
   createTask: (task: Task) => void; // Create a new task
   viewTask: (title: string) => void; // Set the current task to be viewed
+  deleteTask: (title: string) => void; // Delete a task by title
+
   updateTaskTitle: (oldTitle: string, newTitle: string) => void; // Update the title of a task
   updateTaskDescription: (title: string, newDescription: string) => void; // Update the description of a task
   updateTaskStatus: (title: string, newStatus: Status) => void; // Update the status of a task
-  deleteTask: (title: string) => void; // Delete a task by title
+
   startEditing: (task: Task) => void; // Start editing a task
   saveEditing: () => void; // Save changes made during editing
   cancelEditing: () => void; // Cancel editing and revert changes
+
   setEditedTitle: (title: string) => void; // Set the title being edited
   setEditedDescription: (description: string) => void; // Set the description being edited
   setEditedStatus: (status: Status) => void; // Set the status being edited
-  initializeTasks: (tasks: Task[]) => void;
+
+  initializeTasks: (tasks: Task[]) => void; //Loads the tasks from the DB or, in this case, from the dummyData
 }
 
 const useTaskStore = create((set) => ({
-  tasks: [], //declare an initial state with empty array
+  tasks: [dummyTaskList], //declare an initial state with empty array
   currentTask: null as Task | null, //state to keep track of the currently viewed task
   editingTask: null as Task | null,
   editedTitle: "",
@@ -50,14 +54,14 @@ const useTaskStore = create((set) => ({
       tasks: [...state.tasks, task],
     })),
 
-  // Function to view a specific task by title
+  // View a specific task by title
   viewTask: (title: string) =>
     set((state) => ({
       currentTask:
         state.tasks.find((task: Task) => task.title === title) || null,
     })),
 
-  // Function to update the title of a specific task
+  // Update the title of a specific task
   updateTaskTitle: (oldTitle: string, newTitle: string) =>
     set((state) => ({
       tasks: state.tasks.map((task: Task) =>
@@ -65,7 +69,7 @@ const useTaskStore = create((set) => ({
       ),
     })),
 
-  // Function to update the description of a specific task
+  // Update the description of a specific task
   updateTaskDescription: (title: string, newDescription: string) =>
     set((state) => ({
       tasks: state.tasks.map((task: Task) =>
@@ -73,7 +77,7 @@ const useTaskStore = create((set) => ({
       ),
     })),
 
-  // Function to update the status of a specific task
+  // Update the status of a specific task
   updateTaskStatus: (title: string, newStatus: Status) =>
     set((state) => ({
       tasks: state.tasks.map((task: Task) =>
@@ -81,7 +85,7 @@ const useTaskStore = create((set) => ({
       ),
     })),
 
-  // Function to delete a task by title
+  // Delete a task by title
   deleteTask: (title: string) =>
     set((state) => ({
       tasks: state.tasks.filter((task: Task) => task.title !== title),
